@@ -9,15 +9,15 @@ import java.util.Scanner;
  * ExtremeEscalatorPogo
  * https://code.google.com/codejam/contest/956485/dashboard#s=p2
  *
- * @author naheon
+ * @author honey.and.sw
  * @version 2.0.0
  * @since 2016. 10. 25.
  */
 public class ExtremeEscalatorPogo {
 
 	public static void main (String [] args) throws FileNotFoundException {
-		Scanner in = new Scanner(new FileReader("resources/codejam/ExtremeEscalatorPogo_example.in"));
-		PrintStream out = System.out;
+		Scanner in = new Scanner(new FileReader("resources/codejam/ExtremeEscalatorPogo_small.in"));
+		PrintStream out = new PrintStream("resources/codejam/ExtremeEscalatorPogo_small.out");
 
 		/* # of tests */
 		int t = Integer.parseInt(in.nextLine());
@@ -35,15 +35,48 @@ public class ExtremeEscalatorPogo {
 				blueSteps[j] = Integer.parseInt(array[j + 2]);
 			}
 
-			out.println(String.format("Case #%d: %s\n", i, up(blueSteps)));
+			out.println(String.format("Case #%d: %s", i, up(n, blueSteps)));
 		}
 
 		in.close();
 		out.close();
 	}
 
-	private static String up(int[] blueSteps) {
-		int[] possibleHeight = new int[(blueSteps.length - 1) * 2];
-		return "";
+	private static String up(int length, int[] blueSteps) {
+		// Extend blueSteps as an escalator cycles.
+		int[] doubleblues = new int[blueSteps.length * 2];
+		for (int i = 0; i < blueSteps.length; i++) {
+			doubleblues[i] = blueSteps[i];
+			doubleblues[i + blueSteps.length] = blueSteps[i] + length;
+		}
+
+		int[] heights = new int[doubleblues.length - 1];
+		for (int i = 0; i < doubleblues.length - 1; i++) {
+			heights[i] = doubleblues[i + 1] - doubleblues[i];
+		}
+
+		int[] diff = new int[heights.length - 1];
+		for (int i = 0; i < heights.length - 1; i++) {
+			diff[i] = heights[i + 1] - heights[i];
+		}
+
+		int s = Integer.MAX_VALUE, e = 0;
+		for (int i = 0; i < diff.length; i++) {
+			if (diff[i] == -1 || diff[i] == 0 || diff[i] == 1) {
+				if (s > i) s = i;
+			}
+			if (i > 0 && (diff[i - 1] == -1 || diff[i - 1] == 0 || diff[i - 1] == 1)) {
+				if (e < i) e = i;
+			}
+		}
+
+		if (s > e) {
+			for (int i = 0; i < diff.length; i++) {
+				if (diff[i] == -1 || diff[i] == 0 || diff[i] == 1) return "2";
+			}
+			return "1";
+		}
+		else if (s == 0 && e == diff.length - 1) return "infinity";
+		else return (e - s) + 2 + "";
 	}
 }
