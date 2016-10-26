@@ -75,16 +75,17 @@ public class ExtremeEscalatorPogo {
 				slow = ++fast;
 			}
 		}
+		longest = Math.max(longest, fast - slow);
 
 		/* Make result. */
-		if (slow == 0 && fast == diff.length) return "infinity";
-		else if (longest == 0) {
+		if (longest == 0) {
 			for (int i = 0; i < heights.length; i++) {
 				// Can start the first step, a height of 1.
 				if (heights[i] == 1)
 					return "2";
 			}
 			return "1";
-		} else return (longest + 2) + "";
+		} else if (slow == 0 && fast == diff.length) return "infinity";
+		else return (longest + 2) + "";
 	}
 }
