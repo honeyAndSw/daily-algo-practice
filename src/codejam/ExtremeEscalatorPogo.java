@@ -18,6 +18,7 @@ public class ExtremeEscalatorPogo {
 	public static void main (String [] args) throws FileNotFoundException {
 		Scanner in = new Scanner(new FileReader("resources/codejam/ExtremeEscalatorPogo_small.in"));
 		PrintStream out = new PrintStream("resources/codejam/ExtremeEscalatorPogo_small.out");
+		// PrintStream out = System.out;
 
 		/* # of tests */
 		int t = Integer.parseInt(in.nextLine());
@@ -42,8 +43,12 @@ public class ExtremeEscalatorPogo {
 		out.close();
 	}
 
+	private static boolean canMove(int[] diff, int i) {
+		return diff[i] == -1 || diff[i] == 0 || diff[i] == 1;
+	}
+
 	private static String up(int length, int[] blueSteps) {
-		// Extend blueSteps as an escalator cycles.
+		/* Extend blueSteps as an escalator cycles. */
 		int[] doubleblues = new int[blueSteps.length * 2];
 		for (int i = 0; i < blueSteps.length; i++) {
 			doubleblues[i] = blueSteps[i];
@@ -60,23 +65,26 @@ public class ExtremeEscalatorPogo {
 			diff[i] = heights[i + 1] - heights[i];
 		}
 
-		int s = Integer.MAX_VALUE, e = 0;
-		for (int i = 0; i < diff.length; i++) {
-			if (diff[i] == -1 || diff[i] == 0 || diff[i] == 1) {
-				if (s > i) s = i;
-			}
-			if (i > 0 && (diff[i - 1] == -1 || diff[i - 1] == 0 || diff[i - 1] == 1)) {
-				if (e < i) e = i;
+		/* Find start(slow), end(end, exclusive) index of sequences where diff is -1, 0, or 1. */
+		int slow = 0, fast = 0, longest = 0;
+		while (fast < diff.length) {
+			if (canMove(diff, fast)) {
+				fast++;
+			} else {
+				longest = Math.max(longest, fast - slow);
+				slow = ++fast;
 			}
 		}
 
-		if (s > e) {
-			for (int i = 0; i < diff.length; i++) {
-				if (diff[i] == -1 || diff[i] == 0 || diff[i] == 1) return "2";
+		/* Make result. */
+		if (slow == 0 && fast == diff.length) return "infinity";
+		else if (longest == 0) {
+			for (int i = 0; i < heights.length; i++) {
+				// Can start the first step, a height of 1.
+				if (heights[i] == 1)
+					return "2";
 			}
 			return "1";
-		}
-		else if (s == 0 && e == diff.length - 1) return "infinity";
-		else return (e - s) + 2 + "";
+		} else return (longest + 2) + "";
 	}
 }
