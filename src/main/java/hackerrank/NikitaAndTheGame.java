@@ -18,24 +18,27 @@ public class NikitaAndTheGame {
 		while (t-- > 0) {
 			int n = in.nextInt();
 			int[] a = new int[n];
-			for (int i = 0; i < n; i++) a[i] = in.nextInt();
-			System.out.println(score(a, 0, n - 1));
+			int zero = 0;
+			for (int i = 0; i < n; i++) {
+				a[i] = in.nextInt();
+				if (a[i] == 0) zero++;
+			}
+
+			if (zero == n) { // Special case : all 0s.
+				System.out.println(n - 1);
+			} else {
+				System.out.println(score(a, 0, n - 1));
+			}
 		}
 	}
 
 	public static int score(int[] a, int start, int end) {
-		if (a.length <= 1) return 0;
+		if (a.length <= 1 || start == end) return 0;
 
-		int front = start, back = end, diff = a[start] - a[end];
+		int front = start, back = end, diff = a[front] - a[back];
 		while (front < back) {
-			if (diff == 0 && front == back - 1) {
-				// System.out.println("front:" + front + ", back:" + back);
-				return 1 + Math.max(
-					score(a, start, back - 1), score(a, back, end));
-			}
-
 			if (diff == 0) {
-				diff += a[++front] - a[--back];
+				if (++front < --back) diff += a[front] - a[back];
 			} else if (diff > 0) {
 				diff -= a[--back];
 			} else {
@@ -43,7 +46,11 @@ public class NikitaAndTheGame {
 			}
 		}
 
-		// cannot partition a.
+		if (diff == 0) {
+			if ((front == back && a[front] == 0) || (front > back)) {
+				return 1 + Math.max(score(a, start, back), score(a, front, end));
+			}
+		}
 		return 0;
 	}
 }
