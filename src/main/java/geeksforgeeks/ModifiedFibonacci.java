@@ -6,6 +6,9 @@ import java.util.Scanner;
  * Modified Fibonacci
  * http://www.practice.geeksforgeeks.org/problem-page.php?pid=1428
  *
+ * Modulo
+ * https://www.quora.com/What-exactly-is-print-it-modulo-10-9-+-7-in-competitive-programming-websites
+ *
  * Created by honey.and.sw on 2016. 11. 13.
  */
 public class ModifiedFibonacci {
