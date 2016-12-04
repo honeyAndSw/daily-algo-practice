@@ -8,8 +8,7 @@ import java.util.Arrays;
  * Day 1 : No Time for a Taxicab
  * http://adventofcode.com/2016/day/1
  *
- * @author naheon
- * @version 2.0.0
+ * @author honey.and.sw
  * @since 2016. 12. 02.
  */
 public class NoTimeForATaxicab {
