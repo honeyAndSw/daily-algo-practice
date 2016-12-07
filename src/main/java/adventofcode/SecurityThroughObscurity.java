@@ -13,27 +13,44 @@ import java.util.regex.Pattern;
  */
 public class SecurityThroughObscurity {
 	private static final Pattern encrypt = Pattern.compile("([a-z\\-]*)(\\d+)\\[(\\w{5})\\]");
+	private static final char[] alphabet = new char[]{
+		'a', 'b', 'c', 'd', 'e',
+		'f', 'g', 'h', 'i', 'j',
+		'k', 'l', 'm', 'n', 'o',
+		'p', 'q', 'r', 's', 't',
+		'u', 'v', 'w', 'x', 'y', 'z'};
 
 	public int sumOfSectorIds(Iterator<String> names) {
 		int cnt = 0;
 		while (names.hasNext()) {
-			cnt += sectorIdIfValid(names.next());
+			cnt += sectorIdIfValid(names.next(), null);
 		}
 		return cnt;
 	}
 
-	private int sectorIdIfValid(String name) {
+	public int sectorIdExpectedCodeStored(Iterator<String> names, String code) {
+		while (names.hasNext()) {
+			String name = names.next();
+			int cnt = sectorIdIfValid(name, code);
+			if (cnt > 0) {
+				return cnt;
+			}
+		}
+		return 0;
+	}
+
+	private int sectorIdIfValid(String name, String expected) {
 		Matcher matcher = encrypt.matcher(name);
 		matcher.matches();
 
-		Map<Character, Integer> cnt = new HashMap<>();
-		String encryped = matcher.group(1);
-		for (int i = 0; i < encryped.length(); i++) {
-			char ch = encryped.charAt(i);
-			if (ch == '-') continue;
+		String encrypted = matcher.group(1);
+		int id = Integer.parseInt(matcher.group(2));
 
-			int val = cnt.containsKey(ch) ? cnt.get(ch) + 1 : 1;
-			cnt.put(ch, val);
+		Map<Character, Integer> cnt = new HashMap<>();
+		for (int i = 0; i < encrypted.length(); i++) {
+			char ch = encrypted.charAt(i);
+			if (ch == '-') continue;
+			cnt.put(ch, cnt.containsKey(ch) ? cnt.get(ch) + 1 : 1);
 		}
 
 		List<String> cntChar = new ArrayList<>(cnt.size());
@@ -57,13 +74,18 @@ public class SecurityThroughObscurity {
 			checksum += cntChar.get(i).substring(cntChar.get(i).length() - 1);
 		}
 
-		return checksum.equals(matcher.group(3)) ? Integer.parseInt(matcher.group(2)) : 0;
- 	}
-
-	public int sectorIdExpectedCodeStored(Iterator<String> names, String code) {
-		while (names.hasNext()) {
-			int cnt = sectorIdIfValid(names.next());
+		if (expected == null) {
+			// Part 1
+			return checksum.equals(matcher.group(3)) ? id : 0;
+		} else {
+			// Part 2
+			int shift = id % alphabet.length;
+			String real = "";
+			for (int i = 0; i < encrypted.length(); i++) {
+				if (encrypted.charAt(i) == '-') real += " ";
+				else real += alphabet[(encrypted.charAt(i) - 'a' + shift) % alphabet.length];
+			}
+			return real.contains(expected) ? id : 0;
 		}
-		return 0;
-	}
+ 	}
 }

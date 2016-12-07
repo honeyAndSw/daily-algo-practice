@@ -1,9 +1,9 @@
 package adventofcode;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -47,5 +47,17 @@ public class SecurityThroughObscurityTest {
 	public void test2() throws Exception {
 		Scanner scanner = new Scanner(new File("resources/adventofcode/day4"));
 		assertEquals(409147, sto.sumOfSectorIds(scanner));
+	}
+
+	@Test
+	public void test3() throws Exception {
+		List<String> input = Arrays.asList(new String[]{"qzmt-zixmtkozy-ivhz-343[zimtn]"});
+		assertEquals(343, sto.sectorIdExpectedCodeStored(input.iterator(), "very encrypted name"));
+	}
+
+	@Test
+	public void test4() throws Exception {
+		Scanner scanner = new Scanner(new File("resources/adventofcode/day4"));
+		assertEquals(991, sto.sectorIdExpectedCodeStored(scanner, "northpole"));
 	}
 }
