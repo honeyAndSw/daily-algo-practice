@@ -3,6 +3,10 @@ package adventofcode;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+import sun.security.provider.MD5;
+
+import java.math.BigInteger;
+import java.security.MessageDigest;
 
 /**
  * BathroomSecurityTest
