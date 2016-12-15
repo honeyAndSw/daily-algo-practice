@@ -18,7 +18,7 @@ public class InternetProtocolVersion7Test {
 	InternetProtocolVersion7 ipv7 = new InternetProtocolVersion7();
 
 	@Test
-	public void test_isAbba() throws Exception {
+	public void test_isAbba1() throws Exception {
 		assertTrue(ipv7.isAbba("ioxxoj"));
 		assertTrue(ipv7.isAbba("xyyx"));
 		assertFalse(ipv7.isAbba("aaaa"));
@@ -27,7 +27,19 @@ public class InternetProtocolVersion7Test {
 	}
 
 	@Test
-	public void test_supportsTls() throws Exception {
+	public void test_supportsTls1() throws Exception {
+		assertTrue(ipv7.supportsTls("abba[mnop]qrst"));
+		assertFalse(ipv7.supportsTls("abcd[bddb]xyyx"));
+		assertFalse(ipv7.supportsTls("aaaa[qwer]tyui"));
+		assertTrue(ipv7.supportsTls("ioxxoj[asdfgh]zxcvbn"));
+		assertTrue(ipv7.supportsTls("xxxxabbayyyy[mnop]xxxxyyyy[mnop]xxxxyyyy"));
+		assertFalse(ipv7.supportsTls("xxxxabbayyyy[abba]qrst"));
+		assertFalse(ipv7.supportsTls("ab[abcd]ba"));
+		assertFalse(ipv7.supportsTls("aaaa[qwer]tyui"));
+	}
+
+	@Test
+	public void test_supportsTls2() throws Exception {
 		assertTrue(ipv7.supportsTls("abba[mnop]qrst"));
 		assertFalse(ipv7.supportsTls("abcd[bddb]xyyx"));
 		assertFalse(ipv7.supportsTls("aaaa[qwer]tyui"));
@@ -37,6 +49,7 @@ public class InternetProtocolVersion7Test {
 	@Test
 	public void test1() throws Exception {
 		Scanner scanner = new Scanner(new File("resources/adventofcode/day7"));
-		assertEquals(326, ipv7.countTls(scanner));
+		System.out.println(ipv7.countTls(scanner));
+		scanner.close();
 	}
 }

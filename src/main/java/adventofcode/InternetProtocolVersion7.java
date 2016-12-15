@@ -6,7 +6,7 @@ import java.util.Iterator;
  * Day7 : Internet Protocol Version7
  * http://adventofcode.com/2016/day/7
  *
- * @author naheon
+ * @author honey.and.sw
  * @since 2016. 12. 13.
  */
 public class InternetProtocolVersion7 {
@@ -43,18 +43,19 @@ public class InternetProtocolVersion7 {
 	}
 
 	public boolean isAbba(String str) {
-		int slow = 0, fast = str.length() - 1, cnt = 0;
+		if (str.length() < 4) return false;
 
-		while (slow < fast) {
-			if (str.charAt(slow) == str.charAt(fast)) {
-				if (fast - slow == 3 &&
-						str.charAt(slow + 1) == str.charAt(fast - 1) &&
-						str.charAt(slow) != str.charAt(slow + 1)) {
-					return true;
-				}
+		int slow = 0, fast = 3;
+		while (fast < str.length()) {
+			if (str.charAt(slow) == str.charAt(fast)
+					&& str.charAt(slow + 1) == str.charAt(fast - 1)
+					&& str.charAt(slow) != str.charAt(slow + 1)) {
+				// System.out.println("ABBA:" + str.substring(slow, slow + 4));
+				return true;
+			} else {
+				slow++;
+				fast++;
 			}
-			slow++;
-			fast--;
 		}
 
 		return false;
