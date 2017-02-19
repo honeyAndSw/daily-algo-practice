@@ -1,6 +1,7 @@
 package codejam;
 
 import codejam.qual2016.CountingSheep;
+import codejam.qual2016.RevengeOfThePancakes;
 
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
@@ -12,22 +13,23 @@ import java.util.Scanner;
 public class CodeJamMain {
 
     public static void main(String[] args) throws FileNotFoundException {
+        String prefix = "qual2016/RevengeOfThePancakes";
 
         CodeJamRwHelper helper = new CodeJamRwHelper(
-                "qual2016/CountingSheep_large.in",
-                "qual2016/CountingSheep_large.out");
+                prefix + "_large.in",
+                prefix + "_large.out");
 
         Scanner in = helper.inputScanner();
         PrintStream out = helper.outputStream();
 
 		/* # of tests */
         int t = Integer.parseInt(in.nextLine());
-        CountingSheep cs = new CountingSheep();
+        RevengeOfThePancakes revengePancakes = new RevengeOfThePancakes();
 
         for (int i = 1; i <= t; i++) {
-            int n = in.nextInt();
-            int result = cs.fallAsleep(n);
-            out.println("Case #" + i + ": " + (result == -1 ? "INSOMNIA" : result));
+            String problem = in.nextLine();
+            int result = revengePancakes.flipToHappySide(problem);
+            out.println("Case #" + i + ": " + result);
         }
 
         in.close();
